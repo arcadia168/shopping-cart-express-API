@@ -4,6 +4,10 @@ var uuidv1 = require('uuid/v1');
 module.exports = function (app) {
 
     // server routes ===========================================================
+    app.get('/', (req, res) => {
+        res.send('Hello! This is the shopping cart API running on Node, Express and MongoDB! Make some requests.')
+    })
+
     app.post('/api/shopping_cart_item', (req, res) => {
         const shoppingCartItemBody = req.body;
         const newItemId = uuidv1();
