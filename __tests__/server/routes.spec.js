@@ -75,7 +75,7 @@ describe('Routes', () => {
             id: uuidv1(),
             title: 'testitemtodelete',
             price: 100,
-            session: 'testsession'
+            basketId: 'testbasket'
         };
 
         const itemToDeleteId = itemToDeleteBody.id;
@@ -92,5 +92,46 @@ describe('Routes', () => {
         });
 
         expect(expectedDeletedItem[0]).toBe(undefined)
+    });
+
+    it('Endpoint for clearing an entire basket', async () => {
+        // Add some test items to the database for this given basket/session
+        const firstBasketItem = {
+            id: uuidv1(),
+            title: 'firstbasketitem',
+            price: 98,
+            basketId: 'testbasket'
+        };
+        const secondBasketItem = {
+            id: uuidv1(),
+            title: 'secondbasketitem',
+            price: 99,
+            basketId: 'testbasket'
+        };
+        const thirdBasketItem = {
+            id: uuidv1(),
+            title: 'thirdbasketitem',
+            price: 100,
+            basketId: 'testbasket'
+        };
+
+        const firstBaskedItemToSave = new ShoppingCartItem(firstBasketItem);
+        await firstBaskedItemToSave.save();
+
+        const secondBasketItemToSave = new ShoppingCartItem(secondBasketItem);
+        await secondBasketItemToSave.save();
+
+        const thirdBasketItemToSave = new ShoppingCartItem(thirdBasketItem);
+        await thirdBasketItemToSave.save();
+
+        await request(app)
+            .delete(`/api/shopping_cart/testbasket`);
+
+        // Assert that the items from this basket were deleted from the databse
+        const expectedDeletedBasketItems = await ShoppingCartItem.find({
+            basketId: 'testbasket'
+        });
+
+        expect(expectedDeletedBasketItems).toEqual([])
     });
 });

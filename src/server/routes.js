@@ -13,7 +13,8 @@ module.exports = function (app) {
         const newItemId = uuidv1();
         console.log(newItemId);
         shoppingCartItemBody.id = newItemId;
-        shoppingCartItemBody.session = req.session.id;
+        // Each user is only allowed 1 basked per session! So using session for this
+        shoppingCartItemBody.basketId = req.session.id;
         const newShoppingCartItem = new ShoppingCartItem(shoppingCartItemBody);
 
         ShoppingCartItem.updateOne(
@@ -28,10 +29,10 @@ module.exports = function (app) {
             },
         ).then(outcome => {
             if (outcome.ok !== 1) {
-                console.log(`An error occurred when attempting to upsert: ${JSON.stringify(newShoppingCartItem)}`);
+                console.error(`An error occurred when attempting to upsert: ${JSON.stringify(newShoppingCartItem)}`);
                 res.sendStatus(500);
             } else {
-                console.log(`${JSON.stringify(outcome.n)} records upserted`);
+                console.info(`${JSON.stringify(outcome.n)} records upserted`);
                 res.sendStatus(200);
             }
         }).catch(error => {
@@ -40,24 +41,42 @@ module.exports = function (app) {
         });
     });
 
-    // route to handle creating goes here (app.post)
-    // route to handle delete goes here (app.delete)
     app.delete('/api/shopping_cart_item/:item_id', (req, res) => {
         const itemIdToDelete = req.params.item_id;
-        console.log(`itemToDelete is: ${itemIdToDelete}`);
+        console.info(`itemToDelete is: ${itemIdToDelete}`);
 
         ShoppingCartItem.deleteOne({ id: itemIdToDelete }).then(
             outcome => {
                 if (outcome.ok !== 1) {
-                    console.log(`An error occurred when attempting to delete: ${itemIdToDelete}`);
+                    console.error(`An error occurred when attempting to delete item: ${itemIdToDelete}`);
                     res.sendStatus(400);
                 } else {
-                    console.log(`${JSON.stringify(outcome.deletedCount)} records deleted`);
+                    console.info(`${JSON.stringify(outcome.deletedCount)} records deleted`);
                     res.sendStatus(200);
                 }
             }
         ).catch(error => {
             console.error(`An error occurred when deleting: ${error.message}`);
+            res.sendStatus(500);
+        });
+    });
+
+    app.delete('/api/shopping_cart/:basket_id', (req, res) => {
+        const basketToDelete = req.params.basket_id;
+        console.log(`basketToDelete is: ${basketToDelete}`);
+
+        ShoppingCartItem.deleteMany({ basketId: basketToDelete }).then(
+            outcome => {
+                if (outcome.ok !== 1) {
+                    console.error(`An error occurred when attempting to delete basket items: ${itemIdToDelete}`);
+                    res.sendStatus(400);
+                } else {
+                    console.info(`${JSON.stringify(outcome.deletedCount)} basket items deleted`);
+                    res.sendStatus(200);
+                }
+            }
+        ).catch(error => {
+            console.error(`An error occurred when deleting basket: ${error.message}`);
             res.sendStatus(500);
         });
     });
