@@ -1,7 +1,7 @@
  // server/routes.js
 
  // grab the book model we just created
- var MyModel = require('./models/myfirstmodel');
+ var MyModel = require('./models/shoppingCartItem');
  var http = require('http');
 
  module.exports = function (app) {
