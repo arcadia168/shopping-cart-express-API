@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "6ea63b96-c56d-4cfa-9a5f-4fa039037f2a",
+		"name": "Shopping Cart API Requests",
+		"description": "Collection of requests for testing the Node Express Mongo API coding exercise.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Local - Delete an entire basket",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/shopping_cart/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"shopping_cart",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Live - Delete an entire basket",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://shopping-basket-express-api.appspot.com/api/shopping_cart/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "https",
+					"host": [
+						"shopping-basket-express-api",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"shopping_cart",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				},
+				"description": "Version of the request running against the deployed app on Google Cloud Platform."
+			},
+			"response": []
+		},
+		{
+			"name": "Local -  Get the total price of items in a given basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/shopping_cart/totalbasketprice/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"shopping_cart",
+						"totalbasketprice",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Live -  Get the total price of items in a given basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shopping-basket-express-api.appspot.com/api/shopping_cart/totalbasketprice/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "https",
+					"host": [
+						"shopping-basket-express-api",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"shopping_cart",
+						"totalbasketprice",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				},
+				"description": "Version of the request running against the deployed app on Google Cloud Platform."
+			},
+			"response": []
+		},
+		{
+			"name": "Local - Get all items in a given basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/shopping_cart/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"shopping_cart",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Live - Get all items in a given basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shopping-basket-express-api.appspot.com/api/shopping_cart/efc6e4c0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "https",
+					"host": [
+						"shopping-basket-express-api",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"shopping_cart",
+						"efc6e4c0-9537-11e9-b444-4fda1e438d96"
+					]
+				},
+				"description": "Version of the request running against the deployed app on Google Cloud Platform."
+			},
+			"response": []
+		},
+		{
+			"name": "Local - Delete item from basket",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/shopping_cart_item/fc0ab1d0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"shopping_cart_item",
+						"fc0ab1d0-9537-11e9-b444-4fda1e438d96"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Live - Delete item from basket",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://shopping-basket-express-api.appspot.com/api/shopping_cart_item/fc0ab1d0-9537-11e9-b444-4fda1e438d96",
+					"protocol": "https",
+					"host": [
+						"shopping-basket-express-api",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"shopping_cart_item",
+						"fc0ab1d0-9537-11e9-b444-4fda1e438d96"
+					]
+				},
+				"description": "Version of the request running against the deployed app on Google Cloud Platform."
+			},
+			"response": []
+		},
+		{
+			"name": "Local -  Add item to basket",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"iPhone X\",\n\t\"price\": 1099.99\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/shopping_cart_item/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"shopping_cart_item",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Live -  Add item to basket",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"iPhone X\",\n\t\"price\": 1099.99\n}"
+				},
+				"url": {
+					"raw": "https://shopping-basket-express-api.appspot.com/api/shopping_cart_item/",
+					"protocol": "https",
+					"host": [
+						"shopping-basket-express-api",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"shopping_cart_item",
+						""
+					]
+				},
+				"description": "Version of the request running against the deployed app on Google Cloud Platform."
+			},
+			"response": []
+		}
+	]
+}
