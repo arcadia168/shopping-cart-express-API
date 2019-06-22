@@ -1,19 +1,26 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var session = require('express-session')
-var methodOverride = require('method-override');
-var mongoose = require('mongoose');
-const uuidv1 = require('uuid/v1');
-var db = require('../../config/db');
-var routes = require('../../src/server/routes');
+import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import methodOverride from 'method-override';
+import uuidv1 from 'uuid/v1';
+import dbconfig from '../../config/db';
+import routes from '../../src/server/routes';
+import ShoppingCartItem from '../../src/server/models/shoppingCartItem';
 
 // Test utils
-var mongodb = require('mongo-mock');
 var request = require('supertest');
 
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { exportAllDeclaration } from '@babel/types';
+
+// May require additional time for downloading MongoDB binaries
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
+
+let mongoServer;
 let app;
 describe('Routes', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
         app = express();
         app.use(bodyParser.json());
         app.use(bodyParser.json({
@@ -30,18 +37,37 @@ describe('Routes', () => {
             secret: 'keyboard cat',
             cookie: {}
         }
-        mongoose.connect(db.url, { useMongoClient: true });
+        app.use(session(sess));
+
+        // connect to our mongoDB database
+        mongoServer = new MongoMemoryServer();
+        const mongoUri = await mongoServer.getConnectionString();
+        await mongoose.connect(mongoUri, (err) => {
+            if (err) console.error(err);
+        });
         routes(app);
     });
 
-    it('Exposes an endopint to return categories', done => {
-        request(app).get('/').then(
-            response => {
-                expect(response).toBe(null);
-                done();
-            }
-        ).catch(error => {
-            expect(error).toBe(null)
-        });
+    afterAll(async () => {
+        mongoose.disconnect();
+        await mongoServer.stop();
+    });
+
+    it('Exposes an endopint to save shopping cart items', async () => {
+        const response = await request(app)
+            .post('/api/shopping_cart_item')
+            .send({
+                title: 'iPhone XS',
+                price: 999.99
+            });
+
+        // expect(response.status).toBe(200)
+
+        // Assert that the item was inserted into the databse
+       const expectedInsertedItem = await ShoppingCartItem.find({
+           title: 'iPhone XS'
+       });
+
+       expect(expectedInsertedItem[0].title).toBe('iPhone XS')
     });
 });

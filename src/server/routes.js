@@ -28,10 +28,10 @@ module.exports = function (app) {
             (err, numAffected) => {
                 if (err) {
                     console.log('An error occurred:' + JSON.stringify(err));
-                    res.send(400);
+                    res.sendStatus(400);
                 } else {
-                    console.log(`${numAffected} record updated`);
-                    res.send(200);
+                    console.log(`${JSON.stringify(numAffected)} record updated`);
+                    res.sendStatus(200);
                 }
             }
         );

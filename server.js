@@ -7,7 +7,7 @@ var session = require('express-session')
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
 const uuidv1 = require('uuid/v1');
-var db = require('./config/db');
+var dbconfig = require('./config/db');
 var routes = require('./src/server/routes');
 
 // configuration ===========================================
@@ -26,8 +26,7 @@ var sess = {
 var port = process.env.PORT || 8080; // 8080 is detault Google Cloud port
 
 // connect to our mongoDB database
-// (uncomment after you enter in your own credentials in config/db.js)
-mongoose.connect(db.url, {useNewUrlParser: true});
+mongoose.connect(dbconfig.url, {useNewUrlParser: true});
 const database = mongoose.connection
 database.on('error', console.error.bind(console, 'connection error:'));
 database.once('open', () => {
