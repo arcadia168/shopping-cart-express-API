@@ -1,4 +1,4 @@
-# Node Express Shopping Cart App
+# Node Express and MongoDB Shopping Cart API - running on Google Cloud Platform
 
 This is a startup project with a basic Node Express server for a shopping cart.
 
