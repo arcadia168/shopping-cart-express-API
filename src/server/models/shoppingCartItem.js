@@ -6,6 +6,7 @@ var shoppingCartItem = new mongoose.Schema({
     id: String,
     title: String,
     price: Number,
+    session: String,
 })
 
 module.exports = mongoose.model('ShoppingCartItem', shoppingCartItem);

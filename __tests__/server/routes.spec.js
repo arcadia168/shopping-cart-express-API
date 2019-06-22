@@ -1,15 +1,18 @@
-import express from 'express';
-import path from 'path';
-import fs from 'fs';
-import supertest from 'supertest';
-const routes = require('../../src/server/routes');
+var express = require('express');
 var bodyParser = require('body-parser');
+var session = require('express-session')
 var methodOverride = require('method-override');
-const pathName = path.resolve(__dirname, `../__mocks__/profession-categories-mock.json`);
-const professionCategories = fs.readFileSync(pathName, 'utf8');
+var mongoose = require('mongoose');
+const uuidv1 = require('uuid/v1');
+var db = require('../../config/db');
+var routes = require('../../src/server/routes');
+
+// Test utils
+var mongodb = require('mongo-mock');
+var request = require('supertest');
 
 let app;
-describe('Server', () => {
+describe('Routes', () => {
     beforeAll(() => {
         app = express();
         app.use(bodyParser.json());
@@ -20,11 +23,25 @@ describe('Server', () => {
             extended: true
         }));
         app.use(methodOverride('X-HTTP-Method-Override'));
+        var sess = {
+            genid: function (req) {
+                return uuidv1() // use UUIDs for session IDs
+            },
+            secret: 'keyboard cat',
+            cookie: {}
+        }
+        mongoose.connect(db.url, { useMongoClient: true });
         routes(app);
     });
 
-    it('Exposes an endopint to return categories', async () => {
-        const response = await supertest(app).get('/api/categories');
-        expect(JSON.parse(response.text)).toEqual(JSON.parse(professionCategories));
+    it('Exposes an endopint to return categories', done => {
+        request(app).get('/').then(
+            response => {
+                expect(response).toBe(null);
+                done();
+            }
+        ).catch(error => {
+            expect(error).toBe(null)
+        });
     });
 });

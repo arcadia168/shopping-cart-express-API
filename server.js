@@ -2,24 +2,39 @@
 
 // modules =================================================
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
+var session = require('express-session')
 var methodOverride = require('method-override');
-// var mongoose = require('mongoose');
-var http = require('http');
-var _ = require('underscore');
+var mongoose = require('mongoose');
+const uuidv1 = require('uuid/v1');
+var db = require('./config/db');
+var routes = require('./src/server/routes');
 
 // configuration ===========================================
+var app = express();
 
 // config files
-// var db = require('./config/db');
+var sess = {
+    genid: function (req) {
+        return uuidv1() // use UUIDs for session IDs
+    },
+    secret: 'keyboard cat',
+    cookie: {}
+}
 
 // set our port
 var port = process.env.PORT || 8080; // 8080 is detault Google Cloud port
 
 // connect to our mongoDB database
 // (uncomment after you enter in your own credentials in config/db.js)
-// mongoose.connect(db.url);
+mongoose.connect(db.url, {useNewUrlParser: true});
+const database = mongoose.connection
+database.on('error', console.error.bind(console, 'connection error:'));
+database.once('open', () => {
+    console.log(`Connected to the MongoLab MongoDB!`);
+});
+
+app.use(session(sess));
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json
@@ -39,7 +54,7 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // routes ==================================================
-require('./src/server/routes')(app); // configure our routes
+routes(app); // configure our routes
 
 // start app ===============================================
 // startup our app at http://localhost:8080
