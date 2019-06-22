@@ -42,7 +42,7 @@ describe('Routes', () => {
         // connect to our mongoDB database
         mongoServer = new MongoMemoryServer();
         const mongoUri = await mongoServer.getConnectionString();
-        await mongoose.connect(mongoUri, (err) => {
+        await mongoose.connect(mongoUri, { useNewUrlParser: true }, (err) => {
             if (err) console.error(err);
         });
         routes(app);
@@ -53,21 +53,44 @@ describe('Routes', () => {
         await mongoServer.stop();
     });
 
-    it('Exposes an endopint to save shopping cart items', async () => {
-        const response = await request(app)
+    it('Endpoint for adding an item', async () => {
+        await request(app)
             .post('/api/shopping_cart_item')
             .send({
                 title: 'iPhone XS',
                 price: 999.99
             });
 
-        // expect(response.status).toBe(200)
-
         // Assert that the item was inserted into the databse
-       const expectedInsertedItem = await ShoppingCartItem.find({
-           title: 'iPhone XS'
-       });
+        const expectedInsertedItem = await ShoppingCartItem.find({
+            title: 'iPhone XS'
+        });
 
-       expect(expectedInsertedItem[0].title).toBe('iPhone XS')
+        expect(expectedInsertedItem[0].title).toBe('iPhone XS')
+    });
+
+    it('Endpoint for deleting an item', async () => {
+        // Add a test item to the database
+        const itemToDeleteBody = {
+            id: uuidv1(),
+            title: 'testitemtodelete',
+            price: 100,
+            session: 'testsession'
+        };
+
+        const itemToDeleteId = itemToDeleteBody.id;
+        const testItemToDelete = new ShoppingCartItem(itemToDeleteBody);
+        // Save this test item to the database
+        await testItemToDelete.save();
+
+        const response = await request(app)
+            .delete(`/api/shopping_cart_item/${itemToDeleteId}`);
+
+        // Assert that the item was deleted from the databse
+        const expectedDeletedItem = await ShoppingCartItem.find({
+            id: itemToDeleteId
+        });
+
+        expect(expectedDeletedItem[0]).toBe(undefined)
     });
 });
