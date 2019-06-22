@@ -30,6 +30,7 @@
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.0",
     "jest": "^24.8.0",
+    "jest-cli": "^24.8.0",
     "mongodb-memory-server": "^5.1.5",
     "supertest": "^4.0.2"
   }
