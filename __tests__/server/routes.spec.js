@@ -171,7 +171,6 @@ describe('Shopping Cart API', () => {
         const response = await request(app)
             .get(`/api/shopping_cart/testlistbasket`);
 
-        // Assert that the items from this basket were deleted from the databse
         expect(response.body).toEqual(
             [
                 {
@@ -194,5 +193,41 @@ describe('Shopping Cart API', () => {
                 }
             ]
         );
+    });
+
+    it('Has an enpoint API for finding the total value of a given basket', async () => {
+        // Add some test items to the database for this given basket/session
+        const firstBasketItem = {
+            id: uuidv1(),
+            title: 'firstbasketlistitem',
+            price: 10.23,
+            basketId: 'testtotalpricebasket'
+        };
+        const secondBasketItem = {
+            id: uuidv1(),
+            title: 'secondbasketlistitem',
+            price: 20.45,
+            basketId: 'testtotalpricebasket'
+        };
+        const thirdBasketItem = {
+            id: uuidv1(),
+            title: 'thirdbasketlistitem',
+            price: 100.65,
+            basketId: 'testtotalpricebasket'
+        };
+
+        const firstBaskedItemToList = new ShoppingCartItem(firstBasketItem);
+        await firstBaskedItemToList.save();
+
+        const secondBasketItemToList = new ShoppingCartItem(secondBasketItem);
+        await secondBasketItemToList.save();
+
+        const thirdBasketItemToList = new ShoppingCartItem(thirdBasketItem);
+        await thirdBasketItemToList.save();
+
+        const response = await request(app)
+            .get(`/api/shopping_cart/totalbasketprice/testtotalpricebasket`);
+
+        expect(response.body.totalBasketPrice).toBe(131.33)
     });
 });

@@ -1,19 +1,14 @@
-// grab the book model we just created
 var ShoppingCartItem = require('./models/shoppingCartItem');
 var uuidv1 = require('uuid/v1');
 
 module.exports = function (app) {
 
     // server routes ===========================================================
-    // handle things like api calls
-    // Endpoint for adding an item.
     app.post('/api/shopping_cart_item', (req, res) => {
-        //Update the store of itmes in the collection.
         const shoppingCartItemBody = req.body;
         const newItemId = uuidv1();
         console.log(newItemId);
         shoppingCartItemBody.id = newItemId;
-        // Each user is only allowed 1 basked per session! So using session for this
         shoppingCartItemBody.basketId = req.session.id;
         const newShoppingCartItem = new ShoppingCartItem(shoppingCartItemBody);
 
@@ -90,13 +85,42 @@ module.exports = function (app) {
             '-_id id title price basketId',
             (err, docs) => {
                 if (err) {
-                    console.error(`An error occurred when attempting to list basket items: ${basketToList}`);
+                    console.error(`An error occurred when attempting to list basket items for: ${basketToList}`);
                     res.sendStatus(400);
                 } else {
                     console.info(`${JSON.stringify(docs)} basket items listed`);
                     res.send(
                         docs
                     );
+                }
+            }
+        );
+    });
+
+    app.get('/api/shopping_cart/totalbasketprice/:basket_id', (req, res) => {
+        const basketToSum = req.params.basket_id;
+        console.log(`basketToSum is: ${basketToSum}`);
+
+        const query = ShoppingCartItem.find(
+            { basketId: basketToSum },
+            '-_id price',
+            (err, basketItemPrices) => {
+                if (err) {
+                    console.error(`An error occurred when attempting to find total price of basket: ${basketToList}`);
+                    res.sendStatus(400);
+                } else {
+                    console.info(`${JSON.stringify(basketItemPrices)} basket item prices found`);
+
+                    // Find the sum total of the price of the items in the basket
+                    let basketSum = 0;
+                    // NB: Would have used a reducer here, but prices are within objects as .price properties.
+                    basketItemPrices.forEach(basketItemPrice => basketSum += basketItemPrice.price);
+
+                    console.info(`The sum total price of items in the basket ${basketToSum} is: ${basketSum}`);
+
+                    res.send({
+                        totalBasketPrice: basketSum,
+                    });
                 }
             }
         );
