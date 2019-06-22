@@ -68,7 +68,7 @@ module.exports = function (app) {
         ShoppingCartItem.deleteMany({ basketId: basketToDelete }).then(
             outcome => {
                 if (outcome.ok !== 1) {
-                    console.error(`An error occurred when attempting to delete basket items: ${itemIdToDelete}`);
+                    console.error(`An error occurred when attempting to delete basket items: ${basketToDelete}`);
                     res.sendStatus(400);
                 } else {
                     console.info(`${JSON.stringify(outcome.deletedCount)} basket items deleted`);
@@ -79,5 +79,26 @@ module.exports = function (app) {
             console.error(`An error occurred when deleting basket: ${error.message}`);
             res.sendStatus(500);
         });
+    });
+
+    app.get('/api/shopping_cart/:basket_id', (req, res) => {
+        const basketToList = req.params.basket_id;
+        console.log(`basketToList is: ${basketToList}`);
+
+        const query = ShoppingCartItem.find(
+            { basketId: basketToList },
+            '-_id id title price basketId',
+            (err, docs) => {
+                if (err) {
+                    console.error(`An error occurred when attempting to list basket items: ${basketToList}`);
+                    res.sendStatus(400);
+                } else {
+                    console.info(`${JSON.stringify(docs)} basket items listed`);
+                    res.send(
+                        docs
+                    );
+                }
+            }
+        );
     });
 }

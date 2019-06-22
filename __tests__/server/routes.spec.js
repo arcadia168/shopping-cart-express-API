@@ -19,7 +19,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
 
 let mongoServer;
 let app;
-describe('Routes', () => {
+describe('Shopping Cart API', () => {
     beforeAll(async () => {
         app = express();
         app.use(bodyParser.json());
@@ -53,7 +53,7 @@ describe('Routes', () => {
         await mongoServer.stop();
     });
 
-    it('Endpoint for adding an item', async () => {
+    it('Has an API endpoint for adding an item', async () => {
         await request(app)
             .post('/api/shopping_cart_item')
             .send({
@@ -69,7 +69,7 @@ describe('Routes', () => {
         expect(expectedInsertedItem[0].title).toBe('iPhone XS')
     });
 
-    it('Endpoint for deleting an item', async () => {
+    it('Has an API endpoint for deleting a given item', async () => {
         // Add a test item to the database
         const itemToDeleteBody = {
             id: uuidv1(),
@@ -94,7 +94,7 @@ describe('Routes', () => {
         expect(expectedDeletedItem[0]).toBe(undefined)
     });
 
-    it('Endpoint for clearing an entire basket', async () => {
+    it('Has an API endpoint for clearing all of the items in a given basket', async () => {
         // Add some test items to the database for this given basket/session
         const firstBasketItem = {
             id: uuidv1(),
@@ -133,5 +133,66 @@ describe('Routes', () => {
         });
 
         expect(expectedDeletedBasketItems).toEqual([])
+    });
+
+    it('Has an API endpoint for listing all of the items in a given basket', async () => {
+        // Add some test items to the database for this given basket/session
+        const firstBasketItem = {
+            id: uuidv1(),
+            title: 'firstbasketlistitem',
+            price: 98,
+            basketId: 'testlistbasket'
+        };
+        const firstItemId = firstBasketItem.id;
+        const secondBasketItem = {
+            id: uuidv1(),
+            title: 'secondbasketlistitem',
+            price: 99,
+            basketId: 'testlistbasket'
+        };
+        const secondItemId = secondBasketItem.id;
+        const thirdBasketItem = {
+            id: uuidv1(),
+            title: 'thirdbasketlistitem',
+            price: 100,
+            basketId: 'testlistbasket'
+        };
+        const thirdItemId = thirdBasketItem.id;
+
+        const firstBaskedItemToList = new ShoppingCartItem(firstBasketItem);
+        await firstBaskedItemToList.save();
+
+        const secondBasketItemToList = new ShoppingCartItem(secondBasketItem);
+        await secondBasketItemToList.save();
+
+        const thirdBasketItemToList = new ShoppingCartItem(thirdBasketItem);
+        await thirdBasketItemToList.save();
+
+        const response = await request(app)
+            .get(`/api/shopping_cart/testlistbasket`);
+
+        // Assert that the items from this basket were deleted from the databse
+        expect(response.body).toEqual(
+            [
+                {
+                    id: firstItemId,
+                    title: 'firstbasketlistitem',
+                    price: 98,
+                    basketId: 'testlistbasket'
+                },
+                {
+                    id: secondItemId,
+                    title: 'secondbasketlistitem',
+                    price: 99,
+                    basketId: 'testlistbasket'
+                },
+                {
+                    id: thirdItemId,
+                    title: 'thirdbasketlistitem',
+                    price: 100,
+                    basketId: 'testlistbasket'
+                }
+            ]
+        );
     });
 });
