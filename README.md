@@ -40,7 +40,7 @@ To deploy to Google Cloud:
 ### Documentation
 - There are few comments but I hope the tests act as 'specifications' and that this README alongside the 'self documenting' nature of the code will suffice.
 
-### Real world deployment and scalabiliy
+### Real world deployment and scalability
 - Already running on a real cloud (Google Cloud) and talking to a real MongoDB.
 - MongoDB would need to be changes from a non-sharded, non-data redundant free tier to a scalable paid production tier in MongoLab - just add cash.
 - GCP also would also just need upgrading from the free tier to a production, scalable tier via adding some cash!
