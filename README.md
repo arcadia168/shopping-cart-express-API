@@ -1,22 +1,22 @@
-# Node Express and MongoDB Shopping Cart API - running on Google Cloud Platform
+# Node Express and MongoDB Shopping Cart API
 
 This is a startup project with a basic Node Express server for a shopping cart.
 
 Query the live API deployed to and running on the Google Cloud Platform [here](https://shopping-basket-express-api.appspot.com)
 
 To use:
-- npm install
-- npm run start
+- `npm install`
+- `npm run start`
 
 To test:
-- npm run test (or just 'jest')
+- `npm run test` (or just `jest` if you have it installed globally)
 - I have also included a list of exported Postman requests that I have been using to test both the local and live versions of the API [here](./__tests__/shopping_cart_api.postman_collection.json)
 
 Watchers:
-- npm run test:watch
+- `npm run test:watch`
 
 To deploy to Google Cloud:
-- npm run deploy (setup a new project first). 
+- `npm run deploy` (setup a new project first). 
 
 ## Development Notes
 
