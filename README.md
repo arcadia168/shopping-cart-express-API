@@ -20,7 +20,7 @@ To deploy to Google Cloud:
 
 ## Development Notes
 
-### Architectural Decisions:
+### Architectural Decisions
 - This is a simple Node.js Express framework REST API server running on Google Cloud Platform.
 - It makes use of a live test MongoDB running on the free experimental tier of MongoLab. The credentials are in this repo, but this is fine as it is just a test user
 - All the routes are in one file because they are only small, about 125 lines, otherwise I would split them out.
