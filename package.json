@@ -1,5 +1,5 @@
 {
-  "name": "***REMOVED***_***REMOVED***_shopping_cart_api",
+  "name": "erin_eland_shopping_cart_api",
   "version": "1.0.0",
   "description": "An Node and Express API coding exercise - A REST API for a shopping cart",
   "main": "server.js",
